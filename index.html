@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mreplace - メッセージ一括生成ツール</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>mreplace</h1>
+      <p class="subtitle">メッセージ一括生成ツール</p>
+    </header>
+
+    <!-- テンプレート入力セクション -->
+    <section class="section">
+      <h2>📝 メッセージテンプレート</h2>
+      <p class="hint">プレースホルダー: <code>{{メンション}}</code> <code>{{名前}}</code></p>
+      <textarea
+        id="template"
+        placeholder="例: {{メンション}} さん&#10;お疲れ様です。{{名前}}さんに連絡があります。"
+        rows="5"
+      ></textarea>
+    </section>
+
+    <!-- 宛先入力セクション -->
+    <section class="section">
+      <h2>👥 宛先入力</h2>
+
+      <!-- タブ切り替え -->
+      <div class="tabs">
+        <button class="tab active" data-tab="form">フォーム</button>
+        <button class="tab" data-tab="csv">CSV / TSV</button>
+      </div>
+
+      <!-- フォーム入力タブ -->
+      <div class="tab-content active" id="tab-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-name">名前</label>
+            <input type="text" id="input-name" placeholder="田中太郎">
+          </div>
+          <div class="form-group">
+            <label for="input-mention">メンション</label>
+            <input type="text" id="input-mention" placeholder="@tanaka">
+          </div>
+          <button id="btn-add" class="btn btn-primary">追加</button>
+        </div>
+      </div>
+
+      <!-- CSV/TSV入力タブ -->
+      <div class="tab-content" id="tab-csv">
+        <p class="hint">形式: 名前,メンション（カンマ区切り）または 名前→メンション（タブ区切り）</p>
+        <textarea
+          id="csv-input"
+          placeholder="田中太郎,@tanaka&#10;山田花子,@yamada&#10;佐藤次郎,@sato"
+          rows="4"
+        ></textarea>
+        <button id="btn-import" class="btn btn-secondary">一括追加</button>
+      </div>
+
+      <!-- 宛先リスト -->
+      <div class="recipient-list-container">
+        <h3>宛先リスト (<span id="recipient-count">0</span>件)</h3>
+        <ul id="recipient-list" class="recipient-list"></ul>
+        <button id="btn-clear-all" class="btn btn-danger" style="display: none;">全件削除</button>
+      </div>
+    </section>
+
+    <!-- 生成結果セクション -->
+    <section class="section">
+      <div class="section-header">
+        <h2>📨 生成結果</h2>
+        <button id="btn-copy-all" class="btn btn-primary" style="display: none;">全件コピー</button>
+      </div>
+      <div id="results" class="results"></div>
+    </section>
+  </div>
+
+  <!-- 編集モーダル -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h3>宛先を編集</h3>
+      <div class="form-group">
+        <label for="edit-name">名前</label>
+        <input type="text" id="edit-name">
+      </div>
+      <div class="form-group">
+        <label for="edit-mention">メンション</label>
+        <input type="text" id="edit-mention">
+      </div>
+      <div class="modal-actions">
+        <button id="btn-edit-cancel" class="btn btn-secondary">キャンセル</button>
+        <button id="btn-edit-save" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- コピー成功トースト -->
+  <div id="toast" class="toast">コピーしました！</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
